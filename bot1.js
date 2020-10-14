@@ -228,4 +228,4 @@ function processmessage(msg){
 
 
 
-client.login('NzY1MTgxMjc3MTU3NzIwMDc1.X4REmA.AA0TpCTWUNJItHXAEc0cxOexGjU')
+client.login(process.env.token)
