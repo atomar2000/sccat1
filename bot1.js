@@ -19,9 +19,6 @@ client.on('guildMemberAdd', member => {
 })
 
 
-function introduceServer(){
-    console.log(client.channel.name)
-}
 
 
 
@@ -63,7 +60,7 @@ function howreply(msg, primarycommand, arguments){
     }
     //doesnt actually ban anyone right now but the below part is completed
     else if(arguments[0] == 'ban'){
-        if(msg.member.roles.cache.find(role => role.name == "ban") || msg.member.roles.cache.find(role => role.name == "admin")){
+        if(msg.member.hasPermission('BAN_MEMBERS')){
             msg.reply('use **.ban [member_name]**')
         }
         else{
@@ -73,7 +70,7 @@ function howreply(msg, primarycommand, arguments){
     }
     //this part is completed the funtionality is not yet implemented
     else if(arguments[0] == 'kick'){
-        if(msg.member.roles.cache.find(role => role.name == "kick") || msg.member.roles.cache.find(role => role.name == "admin")){
+        if(msg.member.hasPermission('KICK_MEMBERS')){
             msg.reply('use **.kick [member_name]**')
         }
         else{
@@ -95,15 +92,38 @@ function howreply(msg, primarycommand, arguments){
 }
 
 //ban/kick members
-/*
-funtion banmember(msg, primarycommand, arguments){
-    let argsplit = arguments.split(" ")
-    const username = msg.mention.users.first()
-    const reason =  arguments[1]
-    if(!username || )
 
+function kickmember (msg, primarycommand, arguments){
+    const user = getUserFromMention(arguments[0])    
+    if (msg.guild.member(msg.author).hasPermission("BAN_MEMBERS")) {
+            try {
+                msg.guild.member(user).ban();
+            } catch {
+                msg.reply("I do not have permissions to kick, plz ask the admin to provide me the permission to ban someone" + user);
+        }
+    }
+        else {
+            msg.reply("You do not have permissions to ban" + user);
+    }
 }
-*/
+
+
+//kick
+function kickmember (msg, primarycommand, arguments){
+    const user = getUserFromMention(arguments[0])    
+    if (msg.guild.member(msg.author).hasPermission("KICK_MEMBERS")) {
+            try {
+                msg.guild.member(user).kick();
+            } catch {
+                msg.reply("I do not have permissions to kick, plz ask the admin to provide me the permission to kick someone" + user);
+        }
+    }
+        else {
+            msg.reply("You do not have permissions to kick " + user);
+    }
+}
+
+
 
 //working about mentions
 function getUserFromMention(mention) {
@@ -162,7 +182,7 @@ function introduction(msg, primarycommand, arguments){
     
 }
 
-
+ 
 //.countdown [] hrs [] mins [] secs msg (completely functional)
 function countdown(msg, primarycommand, arguments){
     let count = 0
@@ -170,10 +190,12 @@ function countdown(msg, primarycommand, arguments){
     let greet = arguments.slice(3)
     let greets = ""
     console.log(greet)
+    greets += "⏰"
     for(var i in greet){
         greets += greet[i]
         greets += " "
     }
+    greets += "⏰"
     if(arguments[0] == arguments[4]) {
         howreply(msg, primarycommand, "countdown");
     }
@@ -183,7 +205,7 @@ function countdown(msg, primarycommand, arguments){
             setTimeout(function(){ msg.channel.send(greets); }, splitmsg[0]*60*60*1000+splitmsg[1]*60*1000+splitmsg[2]*1000)
         }
         else{
-            setTimeout(function(){ msg.channel.send("time up!"); }, splitmsg[0]*60*60*1000+splitmsg[1]*60*1000+splitmsg[2]*1000)
+            setTimeout(function(){ msg.channel.send("⏰⏰time up!⏰⏰ @" + msg.author.username); }, splitmsg[0]*60*60*1000+splitmsg[1]*60*1000+splitmsg[2]*1000)
         }
     }
 }
@@ -218,6 +240,9 @@ function processmessage(msg){
     else if(primarycommand == "ban"){
         banmember(msg, primarycommand, arguments)
     }
+    else if(primarycommand == "kick"){
+        kickmember(msg, primarycommand, arguments)
+    }
     else if(primarycommand == "introduce" || primarycommand == "help" ){
         introduction(msg, primarycommand, arguments)
     }
@@ -228,4 +253,4 @@ function processmessage(msg){
 
 
 
-client.login(process.env.token)
+client.login('process.env.token')
