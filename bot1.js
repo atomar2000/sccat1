@@ -15,7 +15,7 @@ client.on('message', msg => {
     if(msg.author == client.user){
         return
     }
-    if(msg.content.startsWith('.')){
+    if(msg.content.startsWith('!')){
         processmessage(msg)
     }
 })
@@ -38,17 +38,19 @@ function amongushelp(msg, primarycommand, arguments){
 //add permissions to this
 
 function rolefunction(msg , primarycommand, arguments){
-    if(arguments[1] != arguments[5] && arguments[2] != arguments[5] && arguments[3] != arguments[5]){
-        guild.roles.create({
+    console.log(arguments)
+    var clor = "RANDOM"
+    if(arguments[0] != arguments[1] && arguments[0] == "create"){
+        if(arguments[2] != arguments[3]){ clor = arguments[2]}
+        msg.guild.roles.create({
             data: {
               name: arguments[1],
-              color: arguments[2],
+              color: clor,
             },
-            reason: arguments[3],
+            reason: "",
           })
-            .then(console.log)
-            .catch(console.error);
-            msg.reply('the role was created succesfully')
+            .then(msg.reply("created :thumbsup:"))
+            .catch(console.error)
         }
     else{
         msg.reply('please check the correct syntax using **.how role**') //.how role not yet created
@@ -94,7 +96,7 @@ function howreply(msg, primarycommand, arguments){
         msg.reply("the format to use the command is `.countdown [hrs] [mins] [secs] [message(optional)]`")
     }
     else if(arguments[0] == "role"){
-        msg.reply("try writing in `.role create [role_name]`")
+        msg.reply("try writing in `.role create [role_name] [role_color[hex_code] or random]`")
     }
     else if(arguments[0] == "introduce"){
         msg.reply("try writing `.introduce [blank or [your_username]]`")
@@ -280,7 +282,7 @@ function processmessage(msg){
     if(primarycommand == "hello"){
         msg.channel.send(`hello! ${msg.author}`)
     }
-    else if(primarycommand == "avatarUrl"){
+    else if(primarycommand == "avatar"){
         msg.reply(msg.author.displayAvatarURL())
     }
     else if(primarycommand == "rules"){
@@ -319,8 +321,10 @@ function processmessage(msg){
     else if(primarycommand == "simp"){
         simpcheck(msg, primarycommand, arguments)
     }
+    else if(primarycommand == "permission"){
+        permissions(msg,primarycommand,arguments)
+    }
 
 }
-
 
 client.login(process.env.token)
