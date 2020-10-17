@@ -1,6 +1,11 @@
-const { kMaxLength } = require('buffer')
+const { kMaxLength } = require('buffer');
+const { PRIORITY_ABOVE_NORMAL } = require('constants');
 const Discord = require('discord.js')
 const client = new Discord.Client()
+
+var PREFIX = '.';
+var server_region = "india"
+var server_code = "XXXXXX"
 
 client.on('ready', () => {
     console.log('connected as ' + client.user.tag)
@@ -10,11 +15,25 @@ client.on('message', msg => {
     if(msg.author == client.user){
         return
     }
-    if(msg.content.startsWith('.')){
+    if(msg.content.startsWith('!')){
         processmessage(msg)
     }
 })
 
+
+function amongushelp(msg, primarycommand, arguments){
+    const embed = new Discord.MessageEmbed()
+        .setColor('RANDOM')
+        .setTitle('help amongus! :) ')
+        .setDescription('these are the commands currently operational other commands will be added with updates :v:')
+        .setThumbnail('https://img.icons8.com/nolan/452/among-us.png')        
+        .addFields(
+            {name: 'for updating server info :point_down:', value: 'user `.cserver` to update value of the server region and server code \n use `.server` to get info regarding the current server'},
+            {name: 'NOTE', value: 'dont go to the electrical alone! :)'}
+        )
+        .setFooter('i was created by master cicadA')
+        msg.channel.send(embed)
+}
 
 //add permissions to this
 
@@ -55,7 +74,7 @@ function howreply(msg, primarycommand, arguments){
     //doesnt actually ban anyone right now but the below part is completed
     else if(arguments[0] == 'ban'){
         if(msg.member.hasPermission('BAN_MEMBERS')){
-            msg.reply('use **.ban [member_name]**')
+            msg.reply('use `.ban [member_name]`')
         }
         else{
             msg.reply('you currently dont have the permission to ban someone from the server \n to check permissions you can use !permissions')
@@ -65,29 +84,60 @@ function howreply(msg, primarycommand, arguments){
     //this part is completed the funtionality is not yet implemented
     else if(arguments[0] == 'kick'){
         if(msg.member.hasPermission('KICK_MEMBERS')){
-            msg.reply('use **.kick [member_name]**')
+            msg.reply('use `.kick [member_name]`')
         }
         else{
             msg.reply('you currently dont have the permission to kick someone from the server \n to check permissions you can use !permissions')
         }
     }
     else if(arguments == "countdown" || arguments[0] == "countdown"){
-        msg.reply("the format to use the command is **.countdown [hrs] [mins] [secs] [message(optional)]**")
+        msg.reply("the format to use the command is `.countdown [hrs] [mins] [secs] [message(optional)]`")
     }
     else if(arguments[0] == "role"){
-        msg.reply("try writing in **.role create [role_name]**")
+        msg.reply("try writing in `.role create [role_name]`")
     }
     else if(arguments[0] == "introduce"){
-        msg.reply("try writing **.introduce [blank or [your_username]]**")
+        msg.reply("try writing `.introduce [blank or [your_username]]`")
     }
     else if(arguments[0] == "introduceserver"){
         introduceServer()
     }    
+    else if(arguments[0] == "cserver"){
+        msg.reply("try writing `.cserver [server_region] [server_code]`")
+    }
+    else if(arguments[0] == "amongus"){
+        amongushelp(msg, primarycommand, arguments)
+    }
 }
 
 //ban/kick members
+function servercheck(msg, primarycommand, arguments){
+    if(server_code == "XXXXXX"){
+        msg.reply("the server details has not been updated yet, use `.cserver` command to update the details.")
+    }
+    else{
+        const embed = new Discord.MessageEmbed()
+        .setTitle("SERVER DETAILS:")
+        .setColor("RANDOM")
+        .setThumbnail('https://media1.tenor.com/images/b4504ea1880c999016d40dc01d6ff7e9/tenor.gif?itemid=18355819')
+        .addField("Region:", `${server_region}`, true)
+        .addField("code:", `${server_code}`, true)
+        msg.channel.send(embed)
+    }
+}
 
-function kickmember (msg, primarycommand, arguments){
+function cserver(msg, primarycommand, arguments){
+    if(arguments[0] == arguments[1]){
+        msg.reply("check out `.how cserver` for the correct usage of the command :) ")
+    }
+    else{
+        server_region = arguments[0]
+        server_code = arguments[1]
+        msg.reply("server details updated succesfully")
+    }
+}
+
+function banmember (msg, primarycommand, arguments){
     const user = getUserFromMention(arguments[0])    
     if (msg.guild.member(msg.author).hasPermission("BAN_MEMBERS")) {
             try {
@@ -147,7 +197,8 @@ function introduction(msg, primarycommand, arguments){
         .setThumbnail('https://gamepedia.cursecdn.com/honkaiimpact3_gamepedia_en/f/f2/Schrodinger_(Back).png?version=b685697cd5f407554cb934fc35968fa9')        
         .addFields(
             {name: 'here are some things that i can do flawlessly :point_down:', value: 'ban, kick, countdown, introduce someone, and much more..'},
-            {name: 'stuck?', value: 'if you get stuck just use **.how** in front of the command to get help \n Ex: .how introduce'}
+            {name: 'stuck?', value: 'if you get stuck just use **.how** in front of the command to get help \n Ex: `.how introduce`'},
+            {name: 'among us?', value: 'for info regarding amongus commands use `.how amongus`'}
         )
         .setImage('https://buffer.com/library/content/images/library/wp-content/uploads/2016/06/giphy.gif')
         .setFooter('i was created by master cicadA')
@@ -240,7 +291,15 @@ function processmessage(msg){
     else if(primarycommand == "introduce" || primarycommand == "help" ){
         introduction(msg, primarycommand, arguments)
     }
-    //.getinfo @mention using embed :)
+    else if(primarycommand == "members"){
+        console.log(msg.guild.members)
+    }
+    else if(primarycommand == "server"){
+        servercheck(msg, primarycommand, arguments)
+    }
+    else if(primarycommand == "cserver"){
+        cserver(msg, primarycommand, arguments)
+    }
     
 
 }
