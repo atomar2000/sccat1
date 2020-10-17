@@ -159,7 +159,7 @@ function kickmember (msg, primarycommand, arguments){
             try {
                 msg.guild.member(user).kick();
             } catch {
-                msg.reply("I do not have permissions to kick, plz ask the admin to provide me the permission to kick someone");
+                msg.reply("I do not have permissions to kick, plz ask the admin to provide me the permission to kick someone " + user);
         }
     }
         else {
