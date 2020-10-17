@@ -153,7 +153,7 @@ function banmember (msg, primarycommand, arguments){
 
 
 //kick
-function kickmember (msg, primarycommand, arguments){
+async function kickmember (msg, primarycommand, arguments){
     const user = getUserFromMention(arguments[0])    
     if (msg.guild.member(msg.author).hasPermission("KICK_MEMBERS")) {            
               await msg.guild.member(user).kick()
