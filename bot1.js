@@ -128,17 +128,19 @@ function servercheck(msg, primarycommand, arguments){
 
 function simpcheck(msg, primarycommand, arguments){
     const user = getUserFromMention(arguments[0])
+    var big = ["@everyone we have a simp among us! " , "simp verified ", "dude really? ", "thats insane " ,"keep simping and you'll be kicked"]
+    var small = ["youre still better than others out there dude, dont worry :)", "@everyone this is not me, its a fucking algorithm dude dont trust these numbers", "dude you better work on your numbers", "i think we all agree that i need an update", "even 0.00001% is curse! "]
     if(arguments[0] == arguments[8]){
         msg.reply("use `.simp [mention the user]`")
     } 
     else{
-        var result = Math.random()*100;
-        result = Math.floor(result)
+        var result = Math.floor(Math.random() * Math.floor(100))
+        var option = Math.floor(Math.random() * Math.floor(5))
         if(result < 50){
-            msg.channel.send(`this was kinda unexpected but ${user.username} has a simp percentage of ${result}`)
+            msg.channel.send(`${result}% : ${small[Math.floor(result/10)]}`)
         }
         else{
-            msg.channel.send(`this was kind expected out of you ${user.username}, the simp percentage is ${result}.`)
+            msg.channel.send(`${result}% : ${big[Math.floor(result/10)-5]}`)
         }
     }
 }
@@ -319,7 +321,6 @@ function processmessage(msg){
     }
 
 }
-
 
 
 client.login(process.env.token)
