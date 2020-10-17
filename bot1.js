@@ -155,12 +155,9 @@ function banmember (msg, primarycommand, arguments){
 //kick
 function kickmember (msg, primarycommand, arguments){
     const user = getUserFromMention(arguments[0])    
-    if (msg.guild.member(msg.author).hasPermission("KICK_MEMBERS")) {
-            try {
-                msg.guild.member(user).kick();
-            } catch {
-                msg.reply("I do not have permissions to kick, plz ask the admin to provide me the permission to kick someone " + user);
-        }
+    if (msg.guild.member(msg.author).hasPermission("KICK_MEMBERS")) {            
+              await msg.guild.member(user).kick()
+              .catch(err => console.error(err))
     }
         else {
             msg.reply("You do not have permissions to kick " + user);
