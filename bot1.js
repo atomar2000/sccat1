@@ -15,7 +15,7 @@ client.on('message', msg => {
     if(msg.author == client.user){
         return
     }
-    if(msg.content.startsWith('!')){
+    if(msg.content.startsWith('.')){
         processmessage(msg)
     }
 })
