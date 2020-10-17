@@ -14,12 +14,6 @@ client.on('message', msg => {
         processmessage(msg)
     }
 })
-client.on('guildMemberAdd', member => {
-    introduceServer()
-})
-
-
-
 
 
 //add permissions to this
