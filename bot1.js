@@ -126,6 +126,23 @@ function servercheck(msg, primarycommand, arguments){
     }
 }
 
+function simpcheck(msg, primarycommand, arguments){
+    const user = getUserFromMention(arguments[0])
+    if(arguments[0] == arguments[8]){
+        msg.reply("use `.simp [mention the user]`")
+    } 
+    else{
+        var result = Math.random()*100;
+        result = Math.floor(result)
+        if(result < 50){
+            msg.channel.send(`this was kinda unexpected but ${user.username} has a simp percentage of ${result}`)
+        }
+        else{
+            msg.channel.send(`this was kind expected out of you ${user.username}, the simp percentage is ${result}.`)
+        }
+    }
+}
+
 function cserver(msg, primarycommand, arguments){
     if(arguments[0] == arguments[1]){
         msg.reply("check out `.how cserver` for the correct usage of the command :) ")
@@ -297,7 +314,9 @@ function processmessage(msg){
     else if(primarycommand == "cserver"){
         cserver(msg, primarycommand, arguments)
     }
-    
+    else if(primarycommand == "simp"){
+        simpcheck(msg, primarycommand, arguments)
+    }
 
 }
 
